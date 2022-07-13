@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Multiplayer Snake</title>
+        <!-- <link rel=”stylesheet” href=”https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css”rel=”nofollow” integrity=”sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I” crossorigin=”anonymous”> -->
+        <script src="/socket.io/socket.io.js"></script>
+        
+        <link rel="stylesheet" href="./css/play.css">
+    </head>
+    <body>
+        <section class="vh-100">
+            <div class="container h-100">
+
+                <div id="gameScreen" class="h-100">
+                    <div>
+            
+                      <canvas id="canvas"></canvas>
+                    </div>
+                  </div>
+            </div>
+            <div class="players"><div><h3 id="playerOneName">player1</h3></div><div><h3 id="playerTwoName">player2</h3></div></div>
+        </section>
+    </body>
+    <script src="app.js"></script>
+</html>

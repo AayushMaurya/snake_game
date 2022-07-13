@@ -1,0 +1,23 @@
+body{
+    max-height: 100vh;
+}
+.vh-100{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.players{
+    display: flex;
+    flex-direction: row;
+}
+.players div{
+    padding-left: 60px;
+    padding-right: 60px;
+}
+
+/* #canvas{
+    height: 500px;
+    width: 500px;
+} */
