@@ -22,8 +22,8 @@ http.listen(port, () => {
 
 // socket part
 
-const state = {};
-const connectionRoom = {};
+let state = {};
+let connectionRoom = {};
 
 const {User} = require('./utils/users');
 const { isRealString } = require("./utils/isRealString");
