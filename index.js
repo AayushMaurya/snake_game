@@ -84,7 +84,10 @@ io.on('connection', (connection) => {
         const vel = getUpdatedVelocity(keyCode);
 
         if(vel){
-            if(playerNumber==1) state[roomName].playerOne.vel = vel;
+            if(playerNumber==1){
+                state[roomName].playerOne.vel = vel;
+                console.log(state[roomName].playerOne.vel);
+            }
             else if(playerNumber==2)    state[roomName].playerTwo.vel = vel;
         }
     }
@@ -103,10 +106,15 @@ function startGameIntervals(roomName)
     setTimeout(() => {
         const intervalId = setInterval(()=>{
             const winner = gameLoop(state[roomName]);
+            console.log(winner);
     
             if(!winner)
             {
                 io.to(roomName).emit('gameState', JSON.stringify(state[roomName]));
+            }
+            else if(winner === 100)
+            {
+                io.to(roomName).emit('eatFood');
             }
             else{
                 state[roomName].gameOver = true;
@@ -114,7 +122,6 @@ function startGameIntervals(roomName)
 
                 // saayad state update nhi ho pa rhi thi
                 state[roomName] = null;
-
                 clearInterval(intervalId);
             }
     

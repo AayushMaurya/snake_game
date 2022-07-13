@@ -1,14 +1,17 @@
 const BG_colour = '#231f20';
 const SNAKE_COLOUR1 = '#c2c2c2';
 const SNAKE_COLOUR2 = '#c3c3c3'
-const FOOD_COLOUR = '#e66916';
+const FOOD_COLOUR = '#00FF00';
 const FACE_COLOUR1 = '#0000FF';
-const FACE_COLOUR2 = '#00FFFF';
+const FACE_COLOUR2 = '#FF0000';
 const gameScreen = document.getElementById('gameScreen');
 let roomName = null;
 let playerName = null;
 let playerNumber = null;
 let players = ["Player1", "Player2"];
+const eatAudio = document.getElementById('eat');
+const gameOverAudio = document.getElementById('gameOver');
+const gameWonAudio = document.getElementById('gameWon');
 
 
 const ws = io();
@@ -37,6 +40,7 @@ ws.on('connect', ()=>{
 ws.on('gameState', handleGameState);
 ws.on('gameOver', handleGameOver);
 ws.on('updateUserList', handleUpdateUserList);
+ws.on('eatFood', handleEatFood);
 
 let canvas, ctx;
 
@@ -44,7 +48,7 @@ let gameState = {
     gameOver: true,
     playerOne: {
         pos: {
-            x: 4,
+            x: 3,
             y: 5
         },
         vel: {
@@ -59,7 +63,7 @@ let gameState = {
     },
     playerTwo: {
         pos: {
-            x: 33,
+            x: 34,
             y: 35
         },
         vel: {
@@ -92,6 +96,9 @@ init = () => {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     document.addEventListener('keydown', keydown);
+
+    document.getElementById('playerOneName').style.color = FACE_COLOUR1;
+    document.getElementById('playerTwoName').style.color = FACE_COLOUR2;
 }
 
 keydown = (e) =>{
@@ -111,7 +118,11 @@ function paintGame(state) {
     const sizey = canvas.height / gridsize;
 
     ctx.fillStyle = FOOD_COLOUR;
-    ctx.fillRect(food.x * sizex, food.y * sizey, sizex, sizey);
+    var rad = sizex/2;
+    ctx.beginPath();
+    ctx.arc(rad + food.x * sizex, rad + food.y * sizey, rad, 0, Math.PI*2, true);
+    ctx.closePath();
+    ctx.fill();
 
     paintPlayer(state.playerOne, sizex, sizey, SNAKE_COLOUR1);
     paintPlayer(state.playerTwo, sizex, sizey, SNAKE_COLOUR2);
@@ -123,7 +134,11 @@ function paintGame(state) {
 function paintPlayerFace(playerState, sizex, sizey, colour)
 {
     ctx.fillStyle = colour;
-    ctx.fillRect(playerState.pos.x*sizex, playerState.pos.y*sizey, sizex, sizey);
+    var rad = sizex/2;
+    ctx.beginPath();
+    ctx.arc(rad + playerState.pos.x*sizex, rad + playerState.pos.y*sizey, rad, 0, Math.PI*2, true);
+    ctx.closePath();
+    ctx.fill();
 }
 
 function paintPlayer(playerState, sizex, sizey, colour)
@@ -131,8 +146,12 @@ function paintPlayer(playerState, sizex, sizey, colour)
     const snake = playerState.snake;
 
     ctx.fillStyle = colour;
+    var rad = sizex/2;
     for(let cell of snake) {
-        ctx.fillRect(cell.x*sizex, cell.y*sizey, sizex, sizey);
+        ctx.beginPath();
+        ctx.arc(rad + cell.x*sizex, rad + cell.y*sizey, rad, 0, Math.PI*2, true);
+        ctx.closePath();
+        ctx.fill();
     }
 }
 
@@ -149,10 +168,13 @@ function handleGameOver(winner){
     winner = parseInt(winner);
     ws.disconnect();
     if(winner == playerNumber){
-        if(confirm("you won") == true)
+        gameWonAudio.play();
+        setTimeout(()=>{
+            if(confirm("you won") == true)
             window.location.reload();
         else   
             window.location.href = "/";
+        }, 2000);
     }
     else if(winner == -1){
         if(confirm("Tie")==true)
@@ -161,10 +183,13 @@ function handleGameOver(winner){
             window.location.href = "/";
     }
     else{
-        if(confirm("you loose")==true)
-            window.location.reload();
-        else
-            window.location.href = "/";
+        gameOverAudio.play();
+        setTimeout(()=>{
+            if(confirm("you loose")==true)
+                window.location.reload();
+            else
+                window.location.href = "/";
+        }, 2000);
     }
 }
 
@@ -183,4 +208,9 @@ function handleUpdateUserList(userList){
     
     document.getElementById('playerOneName').innerHTML = players[0];
     document.getElementById('playerTwoName').innerHTML = players[1];
+}
+
+function handleEatFood(){
+    console.log("audio");
+    eatAudio.play();
 }

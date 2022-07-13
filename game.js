@@ -82,8 +82,9 @@ function gameLoop(state) {
     {
         if(cell.x === playerOne.pos.x && cell.y === playerOne.pos.y)
             continue;
-        if(cell.x === playerTwo.pos.x && cell.y===playerTwo.pos.y)
+        if(cell.x === playerTwo.pos.x && cell.y===playerTwo.pos.y){
             return 1;
+        }
     }
 
     // check for player two win
@@ -91,8 +92,9 @@ function gameLoop(state) {
     {
         if(cell.x===playerTwo.pos.x && cell.y===playerTwo.pos.y)
             continue;
-        if(cell.x===playerOne.pos.x && cell.y===playerOne.pos.y)
+        if(cell.x===playerOne.pos.x && cell.y===playerOne.pos.y){
             return 2;
+        }
     }
 
     // check for tie
@@ -110,6 +112,8 @@ function gameLoop(state) {
         playerOne.pos.y += playerOne.vel.y;
 
         randomFood(state);
+
+        return 100;
     }
 
     // if playerTwo eats food
@@ -123,18 +127,21 @@ function gameLoop(state) {
         playerTwo.pos.y += playerTwo.vel.y;
 
         randomFood(state);
-    }
 
+        return 100;
+    }
+    // 100 means some food has been eaten
     // move snake body of playerOne
     if(playerOne.vel.x || playerOne.vel.y)
     {
-        for(let cell of playerOne.snake)
-        {
-            if(cell.x === playerOne.pos.x && cell.y === playerOne.pos.y)
-            {
-                return 2;
-            }
-        }
+        // for(let cell of playerOne.snake)
+        // {
+        //     if(cell.x === playerOne.pos.x && cell.y === playerOne.pos.y)
+        //     {
+        //         console.log("6");
+        //         return 2;
+        //     }
+        // }
 
         playerOne.snake.push({...playerOne.pos});
         playerOne.snake.shift();
@@ -144,13 +151,15 @@ function gameLoop(state) {
     // move body of playerTwo
     if(playerTwo.vel.x || playerTwo.vel.y)
     {
-        for(let cell of playerTwo.snake)
-        {
-            if(cell.x === playerTwo.pos.x && cell.y === playerTwo.pos.y)
-            {
-                return 2;
-            }
-        }
+        // for checking if player touches its own body
+        // for(let cell of playerTwo.snake)
+        // {
+        //     if(cell.x === playerTwo.pos.x && cell.y === playerTwo.pos.y)
+        //     {
+        //         console.log("7");
+        //         return 1;
+        //     }
+        // }
 
         playerTwo.snake.push({...playerTwo.pos});
         playerTwo.snake.shift();
