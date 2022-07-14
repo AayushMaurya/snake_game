@@ -96,7 +96,7 @@ io.on('connection', (connection) => {
         console.log("user disconnected");
         users.removeUser(connection.id);
         
-        state[connectionRoom[connection.id]] = null;
+        state[connectionRoom[connection.id]] = initGame();
         io.to(connectionRoom[connection.id]).emit("gameState", initGame());
     });
 });
@@ -121,7 +121,7 @@ function startGameIntervals(roomName)
                 io.to(roomName).emit('gameOver', winner);
 
                 // saayad state update nhi ho pa rhi thi
-                state[roomName] = null;
+                state[roomName] = initGame();
                 clearInterval(intervalId);
             }
     
